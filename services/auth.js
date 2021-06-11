@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('../models/user');
+const bcrypt = require('bcrypt');
 
 const signUp = async (userData) => {
     try {
@@ -7,7 +8,7 @@ const signUp = async (userData) => {
             name: userData.name,
             surname: userData.surname,
             email: userData.email,
-            password: userData.password
+            password: bcrypt.hashSync(userData.password, 10)
         })
         const userSaved = await user.save();
         return userSaved;
