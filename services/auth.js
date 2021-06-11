@@ -12,7 +12,7 @@ const signUp = async (userData) => {
         const userSaved = await user.save();
         return userSaved;
     } catch (err) {
-        console.log(err);
+        throw new Error('Error en base de datos');
     }
 }
 
