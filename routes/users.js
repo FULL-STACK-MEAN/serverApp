@@ -13,7 +13,7 @@ app.post('/', (req, res) => {
     user.save((err, userSaved) => {
         if (err) {
             if(err.code === 11000) {
-                return res.status(500).json({
+                return res.status(400).json({
                     message: 'El email ya se encuentra en uso'
                 })
             } else {
