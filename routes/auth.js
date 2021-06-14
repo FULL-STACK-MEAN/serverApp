@@ -3,6 +3,7 @@ const app = express();
 const { signUp, getUser } = require('../services/auth');
 const { ErrorHandler } = require('../helpers/errors');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 app.post('/signup', async (req, res, next) => {
     
@@ -37,17 +38,37 @@ app.post('/login', async (req, res, next) => {
         if(!bcrypt.compareSync(req.body.password, user.password)) {
             throw new ErrorHandler(403, 'Contraseña incorrecta');
         } else {
+            const token = jwt.sign({
+                _id: user._id,
+                name: user.name
+            }, 'dhgjshgdj', {expiresIn: 2 * 60})
             res.status(200).json({
                 message: 'El usuario ha iniciado sesión correctamente',
                 userState: {
                     _id: user._id,
                     name: user.name
-                }
+                },
+                token
             })
         }
     } catch(err) {
         return next(err);
     }
+})
+
+app.get('/checktoken', (req, res) => {
+    const token = req.headers.authorization;
+    jwt.verify(token, 'dhgjshgdj', (err, decoded) => {
+        if(err) {
+            res.status(403).json({
+                message: 'Token no válido'
+            })
+        } else {
+            res.status(200).json({
+                message: 'ok'
+            })
+        }
+    })
 })
 
 module.exports = app;
