@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const { ErrorHandler } = require('../helpers/errors');
 
 const signUp = async (userData) => {
     try {
@@ -13,7 +14,11 @@ const signUp = async (userData) => {
         const userSaved = await user.save();
         return userSaved;
     } catch (err) {
-        throw new Error('Error en base de datos');
+        if(err.code === 11000) {
+            throw new ErrorHandler(404, 'El email ya existe en otra cuenta');
+        } else {
+            throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
+        }
     }
 }
 

@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
+const { setErrorResponse, ErrorHandler } = require('./helpers/errors');
 
 app.use(cors());
 
@@ -27,6 +28,14 @@ app.use(express.urlencoded({extended: true}));
 
 // app.use('/users', users);
 app.use('/auth', auth);
+
+app.use('/*', () => {
+    throw new ErrorHandler(404, 'Invalid path');
+})
+
+app.use((err, req, res, next) => {
+    setErrorResponse(err, res);
+})
 
 app.listen(port, () => {
     console.log(`Server listening on http://localhost:${port}`)
