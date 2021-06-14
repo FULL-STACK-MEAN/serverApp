@@ -39,6 +39,10 @@ app.post('/login', async (req, res, next) => {
         } else {
             res.status(200).json({
                 message: 'El usuario ha iniciado sesión correctamente',
+                userState: {
+                    _id: user._id,
+                    name: user.name
+                }
             })
         }
     } catch(err) {
