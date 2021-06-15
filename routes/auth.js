@@ -4,6 +4,7 @@ const { signUp, getUser } = require('../services/auth');
 const { ErrorHandler } = require('../helpers/errors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { tokenVerification } = require('../middleware/tokenverification');
 
 app.post('/signup', async (req, res, next) => {
     
@@ -56,18 +57,9 @@ app.post('/login', async (req, res, next) => {
     }
 })
 
-app.get('/checktoken', (req, res) => {
-    const token = req.headers.authorization;
-    jwt.verify(token, 'dhgjshgdj', (err, decoded) => {
-        if(err) {
-            res.status(403).json({
-                message: 'Token no válido'
-            })
-        } else {
-            res.status(200).json({
-                message: 'ok'
-            })
-        }
+app.get('/checktoken', tokenVerification, (req, res) => {
+    res.status(200).json({
+        message: 'token ok'
     })
 })
 

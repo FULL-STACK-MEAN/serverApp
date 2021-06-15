@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const { setErrorResponse, ErrorHandler } = require('./helpers/errors');
 
-app.use(cors());
+app.use(cors({origin: true, credentials: true}));
 
 const port = 3000;
 
