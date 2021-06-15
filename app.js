@@ -8,7 +8,7 @@ app.use(cors());
 
 const port = 3000;
 
-// const users = require('./routes/users');
+const users = require('./routes/users');
 const auth = require('./routes/auth');
 
 
@@ -26,7 +26,7 @@ mongoose.connect(mongoURI, options)
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-// app.use('/users', users);
+app.use('/users', users);
 app.use('/auth', auth);
 
 app.use('/*', () => {
