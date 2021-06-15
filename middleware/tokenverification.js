@@ -10,6 +10,10 @@ exports.tokenVerification = async (req, res, next) => {
             if(err) {
                 throw new ErrorHandler(403, 'Token expired');
             } else {
+                req.user = {
+                    _id: decoded._id,
+                    name: decoded.name
+                }
                 next();
             }
         })

@@ -42,7 +42,7 @@ app.post('/login', async (req, res, next) => {
             const token = jwt.sign({
                 _id: user._id,
                 name: user.name
-            }, 'dhgjshgdj', {expiresIn: 2 * 60})
+            }, 'dhgjshgdj', {expiresIn: 1 * 60})
             res.status(200).json({
                 message: 'El usuario ha iniciado sesión correctamente',
                 userState: {
@@ -59,7 +59,7 @@ app.post('/login', async (req, res, next) => {
 
 app.get('/checktoken', tokenVerification, (req, res) => {
     res.status(200).json({
-        message: 'token ok'
+        user: req.user
     })
 })
 
