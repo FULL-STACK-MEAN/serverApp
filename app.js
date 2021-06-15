@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { setErrorResponse, ErrorHandler } = require('./helpers/errors');
+const cookieParser = require('cookie-parser');
 
 app.use(cors({origin: true, credentials: true}));
 
@@ -25,6 +26,7 @@ mongoose.connect(mongoURI, options)
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cookieParser());
 
 app.use('/users', users);
 app.use('/auth', auth);
