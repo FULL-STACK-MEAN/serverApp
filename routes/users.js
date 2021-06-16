@@ -3,7 +3,18 @@ const { tokenVerification } = require('../middleware/tokenverification');
 const app = express();
 
 const User = require('../models/user');
-const { getUser } = require('../services/users');
+const { getUser, getUsers } = require('../services/users');
+
+app.get('/', tokenVerification, async (req, res, next) => {
+    try {
+        const users = await getUsers();
+        res.status(200).json({
+            users
+        })
+    } catch(err) {
+        return next(err);
+    }
+})
 
 app.get('/:_id', tokenVerification, async (req, res, next) => {
     try {
