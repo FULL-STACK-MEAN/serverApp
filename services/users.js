@@ -19,7 +19,17 @@ const getUser = async (_id) => {
     }
 }
 
+const updateUserRole = async (_id, role) => {
+    try {
+        const userSaved = await User.findByIdAndUpdate(_id, {$set: {role: role}}, {new: true});
+        return userSaved;
+    } catch(err) {
+        throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
+    }
+}
+
 module.exports = {
     getUser,
-    getUsers
+    getUsers,
+    updateUserRole
 }
