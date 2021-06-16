@@ -8,7 +8,8 @@ const UserSchema = new mongoose.Schema({
         index: true, 
         unique: true 
     },
-    password: String
+    password: String,
+    role: String
 }, {versionKey: false});
 
 module.exports = mongoose.model('User', UserSchema); // El modelo lo asocia con el nombre de colección users

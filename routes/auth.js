@@ -17,14 +17,16 @@ app.post('/signup', async (req, res, next) => {
         const userSaved = await signUp(req.body);
         const token = jwt.sign({
             _id: userSaved._id,
-            name: userSaved.name
+            name: userSaved.name,
+            role: userSaved.role
         }, 'dhgjshgdj', {expiresIn: 30 * 60})
         res.cookie('token', token, {httpOnly: true, secure: true, sameSite: 'none', maxAge: 30 * 60 * 1000 });
         res.status(200).json({
             message: 'El usuario ha sido registrado correctamente',
             userState: {
                 _id: userSaved._id,
-                name: userSaved.name
+                name: userSaved.name,
+                role: userSaved.role
             }
         })
     } catch(err) {
@@ -48,14 +50,16 @@ app.post('/login', async (req, res, next) => {
         } else {
             const token = jwt.sign({
                 _id: user._id,
-                name: user.name
+                name: user.name,
+                role: user.role
             }, 'dhgjshgdj', {expiresIn: 30 * 60})
             res.cookie('token', token, {httpOnly: true, secure: true, sameSite: 'none', maxAge: 30 * 60 * 1000 });
             res.status(200).json({
                 message: 'El usuario ha iniciado sesión correctamente',
                 userState: {
                     _id: user._id,
-                    name: user.name
+                    name: user.name,
+                    role: user.role
                 }
             })
         }

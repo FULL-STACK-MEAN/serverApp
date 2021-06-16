@@ -26,7 +26,8 @@ exports.tokenVerification = async (req, res, next) => {
             } else {
                 req.user = {
                     _id: decoded._id,
-                    name: decoded.name
+                    name: decoded.name,
+                    role: decoded.role
                 }
                 next();
             }
