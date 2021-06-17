@@ -1,6 +1,7 @@
 const express = require('express');
 const { tokenVerification } = require('../middleware/tokenverification');
 const app = express();
+const { ErrorHandler } = require('../helpers/errors');
 
 const User = require('../models/user');
 const { getUser, getUsers, updateUserRole } = require('../services/users');

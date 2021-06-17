@@ -1,5 +1,5 @@
 const User = require('../models/user');
-
+const { ErrorHandler } = require('../helpers/errors');
 
 const getUsers = async () => {
     try {
