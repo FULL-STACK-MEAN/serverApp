@@ -10,6 +10,15 @@ const getCustomers = async () => {
     }
 }
 
+const getCustomer = async (_id) => {
+    try {
+        const customer = await Customer.findOne({_id});
+        return customer;
+    } catch(err) {
+        throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
+    }
+}
+
 const createCustomer = async (customerData) => {
     try {
         const customer = new Customer({
@@ -33,5 +42,6 @@ const createCustomer = async (customerData) => {
 
 module.exports = {
     createCustomer,
-    getCustomers
+    getCustomers,
+    getCustomer
 }

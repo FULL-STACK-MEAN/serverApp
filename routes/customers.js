@@ -2,13 +2,24 @@ const express = require('express');
 const app = express();
 const { tokenVerification } = require('../middleware/tokenverification');
 const { ErrorHandler } = require('../helpers/errors');
-const { createCustomer, getCustomers } = require('../services/customers');
+const { createCustomer, getCustomers, getCustomer } = require('../services/customers');
 
 app.get('/', tokenVerification, async (req, res, next) => {
     try {
         const customers = await getCustomers();
         res.status(200).json({
             customers
+        })
+    } catch(err){
+        return next(err);
+    }
+})
+
+app.get('/:_id', tokenVerification, async (req, res, next) => {
+    try {
+        const customer = await getCustomer(req.params._id)
+        res.status(200).json({
+            customer
         })
     } catch(err){
         return next(err);
