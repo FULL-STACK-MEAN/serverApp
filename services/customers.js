@@ -1,6 +1,15 @@
 const Customer = require('../models/customer');
 const { ErrorHandler } = require('../helpers/errors');
 
+const getCustomers = async () => {
+    try {
+        const customers = await Customer.find({});
+        return customers;
+    } catch(err) {
+        throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
+    }
+}
+
 const createCustomer = async (customerData) => {
     try {
         const customer = new Customer({
@@ -23,5 +32,6 @@ const createCustomer = async (customerData) => {
 }
 
 module.exports = {
-    createCustomer
+    createCustomer,
+    getCustomers
 }
