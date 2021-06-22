@@ -19,6 +19,15 @@ const getCustomer = async (_id) => {
     }
 }
 
+const findCustomers = async (term) => {
+    try {
+        const customers = await Customer.find({name: {$regex: term, $options: 'i'}});
+        return customers;
+    } catch(err) {
+        throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
+    }
+}
+
 const createCustomer = async (customerData) => {
     try {
         const customer = new Customer({
@@ -59,5 +68,6 @@ module.exports = {
     createCustomer,
     getCustomers,
     getCustomer,
-    updateCustomer
+    updateCustomer,
+    findCustomers
 }
