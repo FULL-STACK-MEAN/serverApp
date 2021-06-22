@@ -34,6 +34,21 @@ const createCustomer = async (customerData) => {
     } catch(err) {
         if (err.code === 11000) {
             throw new ErrorHandler(404, 'Ya existe un cliente con ese CIF.');
+        } else if (err.name === "CastError") {
+            throw new ErrorHandler(404, 'MongoDB Error validation data type');
+        } else {            
+            throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
+        }
+    }
+}
+
+const updateCustomer = async (_id, customer) => {
+    try {
+        const customerSaved = await Customer.findOneAndUpdate({_id}, customer, {new: true});
+        return customerSaved;
+    } catch(err) {
+        if (err.name === "CastError") {
+            throw new ErrorHandler(404, 'MongoDB Error validation data type');
         } else {
             throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
         }
@@ -43,5 +58,6 @@ const createCustomer = async (customerData) => {
 module.exports = {
     createCustomer,
     getCustomers,
-    getCustomer
+    getCustomer,
+    updateCustomer
 }
