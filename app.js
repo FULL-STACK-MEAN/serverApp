@@ -12,13 +12,15 @@ const port = 3000;
 const users = require('./routes/users');
 const auth = require('./routes/auth');
 const customers = require('./routes/customers');
+const budgets = require('./routes/budgets');
 
 
 const mongoURI = 'mongodb://localhost:27017/app4'; // en la ruta definimos la base de datos
 const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify: false
 }
 
 mongoose.connect(mongoURI, options)
@@ -32,6 +34,7 @@ app.use(cookieParser());
 app.use('/users', users);
 app.use('/auth', auth);
 app.use('/customers', customers);
+app.use('/budgets', budgets);
 
 app.use('/*', () => {
     throw new ErrorHandler(404, 'Invalid path');

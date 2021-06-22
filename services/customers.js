@@ -29,7 +29,7 @@ const createCustomer = async (customerData) => {
             city: customerData.city,
             contact: customerData.contact
         })
-        const customerSaved = await customer.save({customer});
+        const customerSaved = await customer.save();
         return customerSaved;
     } catch(err) {
         if (err.code === 11000) {
