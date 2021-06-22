@@ -17,6 +17,9 @@ app.get('/', tokenVerification, async (req, res, next) => {
 
 app.get('/search/:term', async (req, res, next) => {
     try {
+        if(req.params.term === undefined) {
+            throw new ErrorHandler(404, 'search term param is mandatory')
+        }
         const customers = await findCustomers(req.params.term);
         res.status(200).json({
             customers
