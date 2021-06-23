@@ -4,9 +4,9 @@ const { tokenVerification } = require('../middleware/tokenverification');
 const { ErrorHandler } = require('../helpers/errors');
 const { createBudget, getBudgets } = require('../services/budgets');
 
-app.get('/', tokenVerification, async (req, res, next) => {
+app.get('/', async (req, res, next) => {
     try {
-        const budgets = await getBudgets;
+        const budgets = await getBudgets();
         res.status(200).json({
             budgets
         })

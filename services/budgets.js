@@ -3,7 +3,7 @@ const { ErrorHandler } = require('../helpers/errors');
 
 const getBudgets = async () => {
     try {
-        const budgets = await Bugdet.find({})
+        const budgets = await Budget.find({})
         return budgets;
     } catch(err) {
         throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
