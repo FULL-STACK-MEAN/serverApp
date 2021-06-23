@@ -16,7 +16,7 @@ const CustomerSchema = new mongoose.Schema({
         phone: String,
         email: String
     },
-    createdAt: Date
+    createdAt: Date,
 }, {
     versionKey: false,
     timestamps: { createdAt: 'createdAt'}
