@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const { tokenVerification } = require('../middleware/tokenverification');
 const { ErrorHandler } = require('../helpers/errors');
-const { createBudget, getBudgets, getBudget } = require('../services/budgets');
+const { createBudget, getBudgets, getBudget, updateBudget } = require('../services/budgets');
 
 app.get('/', tokenVerification, async (req, res, next) => {
     try {
@@ -41,6 +41,21 @@ app.post('/', tokenVerification, async (req, res, next) => {
         res.status(200).json({
             message: 'El presupuesto fue creado correctamente',
             budgetSaved
+        })
+    } catch(err) {
+        return next(err);
+    }
+})
+
+app.put('/:_id', tokenVerification, async (req, res, next) => {
+    try {
+        if(req.params._id === undefined) {
+               throw new ErrorHandler(404, '_id param is mandatory')
+        }
+        const budgetUpdated = await updateBudget(req.params._id, req.body);
+        res.status(200).json({
+            message: 'El presupuesto fue actualizado correctamente',
+            budgetUpdated
         })
     } catch(err) {
         return next(err);

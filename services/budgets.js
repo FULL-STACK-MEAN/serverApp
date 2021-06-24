@@ -21,8 +21,8 @@ const getBudget = async (_id) => {
 
 const createBudget = async (budgetData) => {
     try {
-        const currentBudgetsNumber = await Budget.countDocuments();
-        const newCode = ('000' + (currentBudgetsNumber + 1)).slice(-3) + '-' + new Date().getFullYear();
+        const lastBudgetCode = await Budget.find({},{code: 1, _id: 0}).sort({code: -1}).limit(1);
+        const newCode = ('000' + (Number(lastBudgetCode.code.substring(0,3)) + 1)).slice(-3) + '-' + new Date().getFullYear();
         const budget = new Budget({
             customer: budgetData.customer,
             code: newCode,
@@ -41,8 +41,22 @@ const createBudget = async (budgetData) => {
     }
 }
 
+const updateBudget = async (_id, budget) => {
+    try {
+        const budgetSaved = await Budget.findOneAndUpdate({_id}, budget, {new: true});
+        return budgetSaved;
+    } catch(err) {
+        if (err.name === "CastError") {
+            throw new ErrorHandler(404, 'MongoDB Error validation data type');
+        } else {
+            throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
+        }
+    }
+}
+
 module.exports = {
     createBudget,
     getBudgets,
-    getBudget
+    getBudget,
+    updateBudget
 }
