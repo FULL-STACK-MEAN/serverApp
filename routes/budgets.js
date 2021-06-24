@@ -20,7 +20,7 @@ app.get('/:_id', tokenVerification, async (req, res, next) => {
         if(req.params._id === undefined) {
                throw new ErrorHandler(404, '_id param is mandatory')
         }
-        const budget = await getBudget(_id);
+        const budget = await getBudget(req.params._id);
         res.status(200).json({
             budget
         })
