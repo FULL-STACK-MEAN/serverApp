@@ -22,7 +22,7 @@ const getBudget = async (_id) => {
 const createBudget = async (budgetData) => {
     try {
         const lastBudgetCode = await Budget.find({},{code: 1, _id: 0}).sort({code: -1}).limit(1);
-        const newCode = ('000' + (Number(lastBudgetCode.code.substring(0,3)) + 1)).slice(-3) + '-' + new Date().getFullYear();
+        const newCode = ('000' + (Number(lastBudgetCode[0].code.substring(0,3)) + 1)).slice(-3) + '-' + new Date().getFullYear();
         const budget = new Budget({
             customer: budgetData.customer,
             code: newCode,
