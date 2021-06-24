@@ -10,6 +10,15 @@ const getBudgets = async () => {
     }
 }
 
+const getBudget = async (_id) => {
+    try {
+        const budget = await Budget.findOne({_id});
+        return budget;
+    } catch(err) {
+        throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
+    }
+}
+
 const createBudget = async (budgetData) => {
     try {
         const currentBudgetsNumber = await Budget.countDocuments();
@@ -24,7 +33,6 @@ const createBudget = async (budgetData) => {
         const budgetSaved = await budget.save();
         return budgetSaved;
     } catch(err) {
-        console.log(err);
         if (err.name === "CastError") {
             throw new ErrorHandler(404, 'MongoDB Error validation data type');
         } else {
@@ -35,5 +43,6 @@ const createBudget = async (budgetData) => {
 
 module.exports = {
     createBudget,
-    getBudgets
+    getBudgets,
+    getBudget
 }

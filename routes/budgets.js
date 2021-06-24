@@ -2,13 +2,27 @@ const express = require('express');
 const app = express();
 const { tokenVerification } = require('../middleware/tokenverification');
 const { ErrorHandler } = require('../helpers/errors');
-const { createBudget, getBudgets } = require('../services/budgets');
+const { createBudget, getBudgets, getBudget } = require('../services/budgets');
 
-app.get('/', async (req, res, next) => {
+app.get('/', tokenVerification, async (req, res, next) => {
     try {
         const budgets = await getBudgets();
         res.status(200).json({
             budgets
+        })
+    } catch(err) {
+        return next(err);
+    }
+})
+
+app.get('/:_id', tokenVerification, async (req, res, next) => {
+    try {
+        if(req.params._id === undefined) {
+               throw new ErrorHandler(404, '_id param is mandatory')
+        }
+        const budget = await getBudget(_id);
+        res.status(200).json({
+            budget
         })
     } catch(err) {
         return next(err);
