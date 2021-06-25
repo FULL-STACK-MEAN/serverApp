@@ -6,6 +6,19 @@ const { ErrorHandler } = require('../helpers/errors');
 const User = require('../models/user');
 const { getUser, getUsers, updateUserRole, updateUser } = require('../services/users');
 
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './avatars')
+    },
+    filename: (req, file, cb) => {
+        cb(null, req.body.avatarFileName)
+    }
+})
+
+const upload = multer({storage: storage});
+
 app.get('/', tokenVerification, async (req, res, next) => {
     try {
         const users = await getUsers();
@@ -31,6 +44,16 @@ app.get('/:_id', tokenVerification, async (req, res, next) => {
     }
 })
 
+app.post('/avatar', upload.single('file'), async (req, res, next) => {
+    try {
+        res.status(200).json({
+            message: 'La imagen fue actualizada correctamente'
+        })
+    } catch(err) {
+        return next(err);
+    }
+})
+
 app.put('/role/:_id', tokenVerification, async (req, res, next) => {
     try {
         if(req.params._id === undefined) {
@@ -49,7 +72,7 @@ app.put('/role/:_id', tokenVerification, async (req, res, next) => {
     }
 })
 
-app.put('/:_id', async (req, res, next) => {
+app.put('/:_id', tokenVerification, async (req, res, next) => {
     try {
         if(req.params._id === undefined) {
             throw new ErrorHandler(404, '_id param mandatory');
