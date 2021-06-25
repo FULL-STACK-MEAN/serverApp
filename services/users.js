@@ -28,8 +28,22 @@ const updateUserRole = async (_id, role) => {
     }
 }
 
+const updateUser = async (_id, user) => {
+    try {
+        const userSaved = await User.findOneAndUpdate({_id}, user, {new: true});
+        return userSaved;
+    } catch(err) {
+        if (err.name === "CastError") {
+            throw new ErrorHandler(404, 'MongoDB Error validation data type');
+        } else {
+            throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
+        }
+    }
+}
+
 module.exports = {
     getUser,
     getUsers,
-    updateUserRole
+    updateUserRole,
+    updateUser
 }

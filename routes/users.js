@@ -4,7 +4,7 @@ const app = express();
 const { ErrorHandler } = require('../helpers/errors');
 
 const User = require('../models/user');
-const { getUser, getUsers, updateUserRole } = require('../services/users');
+const { getUser, getUsers, updateUserRole, updateUser } = require('../services/users');
 
 app.get('/', tokenVerification, async (req, res, next) => {
     try {
@@ -45,6 +45,26 @@ app.put('/role/:_id', tokenVerification, async (req, res, next) => {
             userUpdated
         })
     } catch (err) {
+        return next(err);
+    }
+})
+
+app.put('/:_id', async (req, res, next) => {
+    try {
+        if(req.params._id === undefined) {
+            throw new ErrorHandler(404, '_id param mandatory');
+        }
+        if(req.body.email !== undefined ||
+           req.body.password !== undefined ||
+           req.body.role !== undefined) {
+              throw new ErrorHandler(404, 'Email, password and role can\'t be updated');
+        }
+        const userUpdated = await updateUser(req.params._id, req.body);
+        res.status(200).json({
+            message: 'El usuario fue actualizado correctamente',
+            userUpdated
+        })
+    } catch(err) {
         return next(err);
     }
 })
