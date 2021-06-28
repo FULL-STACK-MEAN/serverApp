@@ -1,10 +1,14 @@
 const Customer = require('../models/customer');
 const { ErrorHandler } = require('../helpers/errors');
 
-const getCustomers = async () => {
+const getCustomers = async (skip, limit) => {
     try {
-        const customers = await Customer.find({});
-        return customers;
+        const totalCustomers = await Customer.find({}).countDocuments();
+        const customers = await Customer.find({}).sort({name: 1}).skip(skip).limit(limit);
+        return { 
+            totalCustomers,
+            customers
+        }
     } catch(err) {
         throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
     }

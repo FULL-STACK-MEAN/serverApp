@@ -4,17 +4,6 @@ const { tokenVerification } = require('../middleware/tokenverification');
 const { ErrorHandler } = require('../helpers/errors');
 const { createCustomer, getCustomers, getCustomer, updateCustomer, findCustomers } = require('../services/customers');
 
-app.get('/', tokenVerification, async (req, res, next) => {
-    try {
-        const customers = await getCustomers();
-        res.status(200).json({
-            customers
-        })
-    } catch(err){
-        return next(err);
-    }
-})
-
 app.get('/search/:term', async (req, res, next) => {
     try {
         if(req.params.term === undefined) {
@@ -28,6 +17,19 @@ app.get('/search/:term', async (req, res, next) => {
         return next(err);
     }
 })
+
+app.get('/:skip/:limit', tokenVerification, async (req, res, next) => {
+    try {
+        const customersData = await getCustomers(Number(req.params.skip), Number(req.params.limit));
+        res.status(200).json({
+            totalCustomers: customersData.totalCustomers,
+            customers: customersData.customers
+        })
+    } catch(err){
+        return next(err);
+    }
+})
+
 
 app.get('/:_id', tokenVerification, async (req, res, next) => {
     try {
