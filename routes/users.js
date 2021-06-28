@@ -6,6 +6,7 @@ const { ErrorHandler } = require('../helpers/errors');
 const path = require('path');
 const User = require('../models/user');
 const { getUser, getUsers, updateUserRole, updateUser } = require('../services/users');
+const jwt = require('jsonwebtoken');
 
 const multer = require('multer');
 
@@ -45,9 +46,16 @@ app.get('/:_id', tokenVerification, async (req, res, next) => {
     }
 })
 
-app.post('/avatar', upload.single('file'), async (req, res, next) => {
+app.post('/avatar', tokenVerification, upload.single('file'), async (req, res, next) => {
     try {
         let userSaved = await updateUser(req.file.filename.substring(0, 24), {avatarFileName: req.file.filename})
+        const token = jwt.sign({
+                _id: userSaved._id,
+                name: userSaved.name,
+                role: userSaved.role,
+                avatarFileName: userSaved.avatarFileName
+            }, 'dhgjshgdj', {expiresIn: 30 * 60})
+        res.cookie('token', token, {httpOnly: true, secure: true, sameSite: 'none', maxAge: 30 * 60 * 1000 });
         res.status(200).json({
             message: 'La imagen fue actualizada correctamente',
             userSaved

@@ -10,7 +10,8 @@ const signUp = async (userData) => {
             surname: userData.surname,
             email: userData.email,
             password: bcrypt.hashSync(userData.password, 10),
-            role: 'user'
+            role: 'user',
+            avatarFileName: 'user.svg'
         })
         const userSaved = await user.save();
         return userSaved;

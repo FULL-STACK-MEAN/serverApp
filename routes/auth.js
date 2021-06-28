@@ -18,7 +18,8 @@ app.post('/signup', async (req, res, next) => {
         const token = jwt.sign({
             _id: userSaved._id,
             name: userSaved.name,
-            role: userSaved.role
+            role: userSaved.role,
+            avatarFileName: userSaved.avatarFileName
         }, 'dhgjshgdj', {expiresIn: 30 * 60})
         res.cookie('token', token, {httpOnly: true, secure: true, sameSite: 'none', maxAge: 30 * 60 * 1000 });
         res.status(200).json({
@@ -26,7 +27,8 @@ app.post('/signup', async (req, res, next) => {
             userState: {
                 _id: userSaved._id,
                 name: userSaved.name,
-                role: userSaved.role
+                role: userSaved.role,
+                avatarFileName: userSaved.avatarFileName
             }
         })
     } catch(err) {
@@ -51,7 +53,8 @@ app.post('/login', async (req, res, next) => {
             const token = jwt.sign({
                 _id: user._id,
                 name: user.name,
-                role: user.role
+                role: user.role,
+                avatarFileName: user.avatarFileName
             }, 'dhgjshgdj', {expiresIn: 30 * 60})
             res.cookie('token', token, {httpOnly: true, secure: true, sameSite: 'none', maxAge: 30 * 60 * 1000 });
             res.status(200).json({
@@ -59,7 +62,8 @@ app.post('/login', async (req, res, next) => {
                 userState: {
                     _id: user._id,
                     name: user.name,
-                    role: user.role
+                    role: user.role,
+                    avatarFileName: user.avatarFileName
                 }
             })
         }
