@@ -3,6 +3,7 @@ const { tokenVerification } = require('../middleware/tokenverification');
 const app = express();
 const { ErrorHandler } = require('../helpers/errors');
 
+const path = require('path');
 const User = require('../models/user');
 const { getUser, getUsers, updateUserRole, updateUser } = require('../services/users');
 
@@ -10,10 +11,10 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './avatars')
+        cb(null, path.join(__dirname, '../avatars/'))
     },
     filename: (req, file, cb) => {
-        cb(null, req.body.avatarFileName)
+        cb(null, req.body.image)
     }
 })
 
@@ -46,8 +47,10 @@ app.get('/:_id', tokenVerification, async (req, res, next) => {
 
 app.post('/avatar', upload.single('file'), async (req, res, next) => {
     try {
+        let userSaved = await updateUser(req.file.filename.substring(0, 24), {avatarFileName: req.file.filename})
         res.status(200).json({
-            message: 'La imagen fue actualizada correctamente'
+            message: 'La imagen fue actualizada correctamente',
+            userSaved
         })
     } catch(err) {
         return next(err);
