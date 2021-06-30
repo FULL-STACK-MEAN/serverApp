@@ -3,6 +3,7 @@ const app = express();
 const { tokenVerification } = require('../middleware/tokenverification');
 const { ErrorHandler } = require('../helpers/errors');
 const { createBudget, getBudgets, getBudget, updateBudget } = require('../services/budgets');
+const { createBudgetPDF } = require('../helpers/budgetPDF');
 
 app.get('/', tokenVerification, async (req, res, next) => {
     try {
@@ -38,6 +39,7 @@ app.post('/', tokenVerification, async (req, res, next) => {
                throw new ErrorHandler(404, 'customer, data, validUntil and items data are mandatory')
         }
         const budgetSaved = await createBudget(req.body);
+        await createBudgetPDF();
         res.status(200).json({
             message: 'El presupuesto fue creado correctamente',
             budgetSaved
