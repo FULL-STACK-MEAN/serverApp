@@ -6,7 +6,8 @@ const BudgetSchema = new mongoose.Schema({
     date: Date,
     validUntil: Date,
     items: Object,
-    createdAt: Date
+    createdAt: Date,
+    salesUser: Object
 }, {
     versionKey: false,
     timestamps: { createdAt: 'createdAt'}

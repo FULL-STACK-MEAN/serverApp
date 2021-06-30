@@ -18,8 +18,14 @@
         border-top: 1px solid #5D6975;
         border-bottom: 1px solid #5D6975;
     }
+    .logo {
+        text-align: center;
+    }
+    .logo img {
+        width: 2cm;
+    }
     header {
-        padding: 0.15cm 0;
+        padding: 0.30cm 0;
     }
 
     header p {
@@ -44,9 +50,50 @@
     }
     table {
         width: 100%;
+        padding: 0.15cm 0;
+        border-collapse: collapse;
+        border-spacing: 0;
     }
+    table th {
+        border-top: 1px solid #5D6975;
+        border-bottom: 1px solid #5D6975;
+    }
+    table th,
+    table td {
+        padding: 0.3cm 0.5cm;
+        font-size: 0.30cm;
+        text-align: right;
+    }
+    table th:nth-child(1),
+    table td:nth-child(1) {
+        text-align: left;
+        width: 50%;
+    }
+
+    table tr:nth-child(odd) td {
+        background: #F5F5F5;
+    }
+
+    table.total {
+        margin-top: 0.3cm;
+    }
+
+    table.total tr td {
+        border-top: 1px solid #5D6975;
+        background: #F5F5F5;
+        text-align: right;
+    }
+
+    table.total tr td:nth-child(1) {
+        text-align: right;
+        width: auto;
+    }
+
 </style>
 <body>
+    <div class="logo">
+        <img src="../budgetsPDF/logo.svg" alt="">
+    </div>
     <h1>Presupuesto</h1>
     <header>
         <div class="customer">
@@ -85,10 +132,11 @@
             <td>200</td>
         </tr>
     </table>
-    <table>
+    <table class="total">
         <tr>
             <td colspan="3">Total presupuesto sin IVA</td>
             <td>1100</td>
         </tr>
     </table>
+    <p style="margin-top: 0.2cm">Para más información contactar con Juan Pérez +3466665432</p>
 </body>

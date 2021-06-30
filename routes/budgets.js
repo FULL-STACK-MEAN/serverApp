@@ -35,11 +35,12 @@ app.post('/', tokenVerification, async (req, res, next) => {
         if(req.body.customer === undefined ||
            req.body.date === undefined ||
            req.body.validUntil === undefined ||
-           req.body.items === undefined) {
-               throw new ErrorHandler(404, 'customer, data, validUntil and items data are mandatory')
+           req.body.items === undefined ||
+           req.body.salesUser === undefined) {
+               throw new ErrorHandler(404, 'customer, data, validUntil, items and salesUser data are mandatory')
         }
         const budgetSaved = await createBudget(req.body);
-        await createBudgetPDF();
+        await createBudgetPDF(budgetSaved);
         res.status(200).json({
             message: 'El presupuesto fue creado correctamente',
             budgetSaved
