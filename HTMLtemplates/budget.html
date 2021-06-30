@@ -42,6 +42,9 @@
     .company {
         float: right;
     }
+    table {
+        width: 100%;
+    }
 </style>
 <body>
     <h1>Presupuesto</h1>
@@ -62,4 +65,30 @@
             <p>info@acme.com</p>
         </div>
     </header>
+    <table>
+        <tr>
+            <th>Artículo</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Importe</th>
+        </tr>
+        <tr>
+            <td>Tuerca 20/25</td>
+            <td>1000</td>
+            <td>0.9</td>
+            <td>900</td>
+        </tr>
+        <tr>
+            <td>Arandela 20/25</td>
+            <td>2000</td>
+            <td>0.1</td>
+            <td>200</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td colspan="3">Total presupuesto sin IVA</td>
+            <td>1100</td>
+        </tr>
+    </table>
 </body>
