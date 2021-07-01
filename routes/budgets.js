@@ -50,6 +50,7 @@ app.get('/sendemail/:_id', tokenVerification, async (req, res, next) => {
         })
 
         const budget = await getBudget(req.params._id);
+        console.log(budget.customer.contact.email)
         // En el caso de Gmail, autorizar desde https://myaccount.google.com/lesssecureapps
         const budgetEmail =  {
             from: 'getafemean@gmail.com',
@@ -61,7 +62,7 @@ app.get('/sendemail/:_id', tokenVerification, async (req, res, next) => {
                     <tbody style="display: block; width: 100%;">
                         <tr style="display: block; width: 100%;">
                             <td style="display: block; width: 100%; text-align: center; ">
-                                <img src="http://localhost:3000/pics/logo.svg" style="height: 80px">
+                                <img src="http://localhost:3000/helpers/logo.svg" style="height: 80px">
                             </td>
                         </tr>
                         <tr style="display: block; width: 100%;">
@@ -72,7 +73,7 @@ app.get('/sendemail/:_id', tokenVerification, async (req, res, next) => {
                         </tr>
                         <tr style="display: block; width: 100%;">
                             <td style="display: block; width: 100%;">
-                                <a href="http://localhost:3000/pdfs/${budget.code}.pdf" target="_blank" style="background-color: brown; color: white; font-family:Arial, Helvetica, sans-serif; border: none; border-radius: 5px; padding: 5px 10px;">Descargar presupuesto</a>
+                                <a href="http://localhost:3000/budgetsPDF/${budget.code}.pdf" target="_blank" style="background-color: brown; color: white; font-family:Arial, Helvetica, sans-serif; border: none; border-radius: 5px; padding: 5px 10px;">Descargar presupuesto</a>
                             </td>
                         </tr>
                         <tr style="display: block; width: 100%;">
@@ -86,7 +87,7 @@ app.get('/sendemail/:_id', tokenVerification, async (req, res, next) => {
             `,
             attachments: [
                 {
-                    path: 'budgetsPDF/021-2021.pdf',
+                    path: 'budgetsPDF/' + budget.code + '.pdf',
                     contentType: 'application/pdf'
                 }
             ]
@@ -94,7 +95,7 @@ app.get('/sendemail/:_id', tokenVerification, async (req, res, next) => {
 
         transporter.sendMail(budgetEmail, (err, info) => {
             if(err) {
-                console.log(err)
+                throw new ErrorHandler(500, 'Error en el envío del correo, inténtelo mas tarde')
             } else {
                 console.log(info)
             }
