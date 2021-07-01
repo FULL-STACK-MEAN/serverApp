@@ -1,7 +1,7 @@
 const pdf = require('html-pdf');
 const path = require('path');
 
-const createBudgetPDF = (budget) => {
+const createBudgetPDF = (budget, user) => {
     const logoPath = path.join(__dirname, './logo.svg');
     const budgetDate = new Date(budget.date).getDate() + '/' +
                        (new Date(budget.date).getMonth() + 1) + '/' +
@@ -24,6 +24,7 @@ const createBudgetPDF = (budget) => {
     budget.items.forEach(elem => {
         totalBudget += elem.amount;
     });
+    let contactText = `Para mayor información contacte con ${user.name} ${user.surname} en el teléfono ${user.phone}`; 
     const content = `
 <style>
     * {
@@ -154,7 +155,7 @@ const createBudgetPDF = (budget) => {
             <td>${totalBudget}</td>
         </tr>
     </table>
-    <p style="margin-top: 0.2cm">Para más información contactar con Juan Pérez +3466665432</p>
+    <p style="margin-top: 0.2cm">${contactText}</p>
 </body>
     `;
 

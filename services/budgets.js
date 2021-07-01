@@ -28,7 +28,8 @@ const createBudget = async (budgetData) => {
             code: newCode,
             date: budgetData.date,
             validUntil: budgetData.validUntil,
-            items: budgetData.items
+            items: budgetData.items,
+            idSalesUser: budgetData.idSalesUser
         })
         const budgetSaved = await budget.save();
         return budgetSaved;

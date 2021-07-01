@@ -4,6 +4,7 @@ const { tokenVerification } = require('../middleware/tokenverification');
 const { ErrorHandler } = require('../helpers/errors');
 const { createBudget, getBudgets, getBudget, updateBudget } = require('../services/budgets');
 const { createBudgetPDF } = require('../helpers/budgetPDF');
+const { getUser } = require('../services/users');
 
 app.get('/', tokenVerification, async (req, res, next) => {
     try {
@@ -36,11 +37,12 @@ app.post('/', tokenVerification, async (req, res, next) => {
            req.body.date === undefined ||
            req.body.validUntil === undefined ||
            req.body.items === undefined ||
-           req.body.salesUser === undefined) {
-               throw new ErrorHandler(404, 'customer, data, validUntil, items and salesUser data are mandatory')
+           req.body.idSalesUser === undefined) {
+               throw new ErrorHandler(404, 'customer, data, validUntil, items and idSalesUser data are mandatory')
         }
         const budgetSaved = await createBudget(req.body);
-        await createBudgetPDF(budgetSaved);
+        const user = await getUser(req.body.idSalesUser);
+        await createBudgetPDF(budgetSaved, user);
         res.status(200).json({
             message: 'El presupuesto fue creado correctamente',
             budgetSaved
