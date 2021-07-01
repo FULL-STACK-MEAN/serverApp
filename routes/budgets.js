@@ -17,6 +17,22 @@ app.get('/', tokenVerification, async (req, res, next) => {
     }
 })
 
+app.get('/createpdf/:_id', tokenVerification, async (req, res, next) => {
+    try {
+        if(req.params._id === undefined) {
+               throw new ErrorHandler(404, '_id param is mandatory')
+        }
+        const budget = await getBudget(req.params._id);
+        const user = await getUser(budget.idSalesUser);
+        await createBudgetPDF(budget, user);
+        res.status(200).json({
+            message: 'El PDF fue generado correctamente'
+        })
+    } catch (err) {
+        return next(err);
+    }
+})
+
 app.get('/:_id', tokenVerification, async (req, res, next) => {
     try {
         if(req.params._id === undefined) {
@@ -41,8 +57,8 @@ app.post('/', tokenVerification, async (req, res, next) => {
                throw new ErrorHandler(404, 'customer, data, validUntil, items and idSalesUser data are mandatory')
         }
         const budgetSaved = await createBudget(req.body);
-        const user = await getUser(req.body.idSalesUser);
-        await createBudgetPDF(budgetSaved, user);
+        // const user = await getUser(req.body.idSalesUser);
+        // await createBudgetPDF(budgetSaved, user);
         res.status(200).json({
             message: 'El presupuesto fue creado correctamente',
             budgetSaved
@@ -51,6 +67,7 @@ app.post('/', tokenVerification, async (req, res, next) => {
         return next(err);
     }
 })
+
 
 app.put('/:_id', tokenVerification, async (req, res, next) => {
     try {

@@ -36,6 +36,7 @@ app.use('/auth', auth);
 app.use('/customers', customers);
 app.use('/budgets', budgets);
 app.use('/avatars', express.static('avatars'));
+app.use('/budgetspdf', express.static('budgetsPDF'));
 
 app.use('/*', () => {
     throw new ErrorHandler(404, 'Invalid path');
