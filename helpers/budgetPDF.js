@@ -161,7 +161,7 @@ const createBudgetPDF = (budget, user) => {
 
     pdf.create(content).toFile(path.join(__dirname, '../budgetsPDF/' + budget.code + '.pdf'), (err, res) => {
         if(err) {
-            console.log(err)
+            throw new ErrorHandler(500, 'Error en generación PDF, inténtelo más tarde por favor.');
         }
     })
 }
