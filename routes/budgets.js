@@ -27,9 +27,11 @@ app.get('/createpdf/:_id', tokenVerification, async (req, res, next) => {
         }
         const budget = await getBudget(req.params._id);
         const user = await getUser(budget.idSalesUser);
-        await createBudgetPDF(budget, user);
+        const resPDF = await createBudgetPDF(budget, user);
+        console.log(resPDF);
         res.status(200).json({
-            message: 'El PDF fue generado correctamente'
+            message: 'El PDF fue generado correctamente',
+            resPDF
         })
     } catch (err) {
         return next(err);
