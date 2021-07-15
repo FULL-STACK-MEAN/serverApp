@@ -25,7 +25,9 @@ const getCustomer = async (_id) => {
 
 const findCustomers = async (term) => {
     try {
-        const customers = await Customer.find({name: {$regex: term, $options: 'i'}});
+        const metaTerm = term.replace(/á/ig, 'a').replace(/é/ig, 'e').replace(/í/ig, 'i').replace(/ó/ig, 'o').replace(/ú/ig, 'u');
+        const customers = await Customer.find({metaName: {$regex: metaTerm, $options: 'i'}});
+        // const customers = await Customer.find({$text: {$search: term}});
         return customers;
     } catch(err) {
         throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
@@ -36,6 +38,7 @@ const createCustomer = async (customerData) => {
     try {
         const customer = new Customer({
             name: customerData.name,
+            metaName: customerData.name.replace(/á/ig, 'a').replace(/é/ig, 'e').replace(/í/ig, 'i').replace(/ó/ig, 'o').replace(/ú/ig, 'u'),
             cif: customerData.cif,
             adress: customerData.adress,
             cp: customerData.cp,
@@ -57,6 +60,9 @@ const createCustomer = async (customerData) => {
 
 const updateCustomer = async (_id, customer) => {
     try {
+        if(customer.name !== undefined) {
+           customer.metaName = customer.name.replace(/á/ig, 'a').replace(/é/ig, 'e').replace(/í/ig, 'i').replace(/ó/ig, 'o').replace(/ú/ig, 'u');
+        }
         const customerSaved = await Customer.findOneAndUpdate({_id}, customer, {new: true});
         return customerSaved;
     } catch(err) {

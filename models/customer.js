@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const CustomerSchema = new mongoose.Schema({
     name: String,
+    metaName: String,
     cif: {
         type: String,
         index: true,
