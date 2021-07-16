@@ -19,10 +19,44 @@ const getBudget = async (_id) => {
     }
 }
 
+const getAggCustomers = async () => {
+    try {
+        const aggCustomers = await Budget.aggregate([
+                                        {$unwind: "$items"},
+                                        {$group: {_id: "$customer.name", totals: {$sum: "$items.amount"}}},
+                                        {$project: {customer: "$_id", totals: 1, _id: 0}},
+                                        {$sort: {totals: -1}}
+                                    ])
+        return aggCustomers;
+    } catch(err) {
+        throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
+    }
+}
+
+const getAggMonths = async () => {
+    try {
+        const aggMonths = await Budget.aggregate([
+                                        {$unwind: "$items"},
+                                        {$group: {_id: {month: {$month: "$date"}, year: {$year: "$date"}}, totals: {$sum: "$items.amount"}}},
+                                        {$project: {month: "$_id.month", year: "$_id.year", totals: 1, _id: 0}},
+                                        {$sort: {year: -1, month: -1}},
+                                        {$limit: 3}
+                                    ])
+        return aggMonths;
+    } catch(err) {
+        throw new ErrorHandler(500, 'Error en base de datos, inténtelo más tarde por favor.');
+    }
+}
+
 const createBudget = async (budgetData) => {
     try {
         const lastBudgetCode = await Budget.find({},{code: 1, _id: 0}).sort({code: -1}).limit(1);
-        const newCode = ('000' + (Number(lastBudgetCode[0].code.substring(0,3)) + 1)).slice(-3) + '-' + new Date().getFullYear();
+        let newCode;
+        if(lastBudgetCode.length === 0 || lastBudgetCode === undefined) {
+            newCode = '001' + '-' + new Date().getFullYear();
+        } else {
+            newCode = ('000' + (Number(lastBudgetCode[0].code.substring(0,3)) + 1)).slice(-3) + '-' + new Date().getFullYear();
+        }
         const budget = new Budget({
             customer: budgetData.customer,
             code: newCode,
@@ -59,5 +93,7 @@ module.exports = {
     createBudget,
     getBudgets,
     getBudget,
-    updateBudget
+    updateBudget,
+    getAggCustomers,
+    getAggMonths
 }

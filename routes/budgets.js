@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 
 const { tokenVerification } = require('../middleware/tokenverification');
 const { ErrorHandler } = require('../helpers/errors');
-const { createBudget, getBudgets, getBudget, updateBudget } = require('../services/budgets');
+const { createBudget, getBudgets, getBudget, updateBudget, getAggCustomers, getAggMonths } = require('../services/budgets');
 const { createBudgetPDF } = require('../helpers/budgetPDF');
 const { getUser } = require('../services/users');
 
@@ -14,6 +14,28 @@ app.get('/', tokenVerification, async (req, res, next) => {
         const budgets = await getBudgets();
         res.status(200).json({
             budgets
+        })
+    } catch(err) {
+        return next(err);
+    }
+})
+
+app.get('/agg-customers', tokenVerification, async (req, res, next) => {
+    try {
+        const aggCustomers = await getAggCustomers();
+        res.status(200).json({
+            aggCustomers
+        })
+    } catch(err) {
+        return next(err);
+    }
+})
+
+app.get('/agg-months', tokenVerification, async (req, res, next) => {
+    try {
+        const aggMonths = await getAggMonths();
+        res.status(200).json({
+            aggMonths
         })
     } catch(err) {
         return next(err);
