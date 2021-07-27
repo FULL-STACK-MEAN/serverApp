@@ -4,7 +4,38 @@ const { tokenVerification } = require('../middleware/tokenverification');
 const { ErrorHandler } = require('../helpers/errors');
 const { createCustomer, getCustomers, getCustomer, updateCustomer, findCustomers } = require('../services/customers');
 
-app.get('/search/:term', async (req, res, next) => {
+/**
+* @swagger
+* tags:
+*   name: Customers
+*   description: Customer API Rest (needs json webtoken)
+*/
+
+/**
+* @swagger
+* /customers/search/{term}:
+*   get:
+*       summary: return customers matched by name
+*       tags: [Customers]
+*       parameters:
+*           - in: path
+*             name: term
+*             schema:
+*               type: string
+*             required: true
+*             description: string to be used in regex to match customers by name field
+*       produces:
+*           - application/json
+*       responses:
+*           200:
+*               description: 'json response {customers: <array-customers> | []}'
+*           404:
+*               description: term param mandatory error
+*           500:
+*               description: general database error
+*/
+
+app.get('/search/:term', tokenVerification, async (req, res, next) => {
     try {
         if(req.params.term === undefined) {
             throw new ErrorHandler(404, 'search term param is mandatory')

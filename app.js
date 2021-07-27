@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const { setErrorResponse, ErrorHandler } = require('./helpers/errors');
 const cookieParser = require('cookie-parser');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
 
 app.use(cors({origin: true, credentials: true}));
 
@@ -30,6 +32,31 @@ mongoose.connect(mongoURI, options)
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'ACME Technologies',
+            version: '1.0.0',
+            description: 'AppBudgets API Rest server',
+            contact: {
+                name: 'Pedro Jiménez',
+                email: 'pjimenez@corenetworks.es'
+            }
+        },
+        servers: [
+            {
+                url: 'http://localhost:3000'
+            }
+        ],
+        supportedSubmitMethods: []
+    },
+    apis: ['./routes/customers.js']
+}
+
+const specs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(specs, {customCss: '.swagger-ui .topbar, .swagger-ui .try-out {display: none}'}))
 
 app.use('/users', users);
 app.use('/auth', auth);
